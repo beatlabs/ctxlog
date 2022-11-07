@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Initialize CI
+        if: github.event.action != 'labeled'
+        run: make ci-initialize
+
+      - name: Run linter
+        if: github.event.action != 'labeled'
+        run: make ci-lint
+
+      - name: Run tests
+        if: github.event.action != 'labeled'
+        run: make ci-test
+
+      - name: Run component tests
+        if: github.event.action != 'labeled'
+        run: make ci-component-test
+
+      - name: Run Bumpr
+        # Run this step only if a label is added to the PR (action == labeled) or if the branch is master
+        # if a label is added, Bumpr will comment the next version
+        # if the branch is master (basically when merging the PR), Bumpr will add a new tag
+        if: github.event.action == 'labeled' || github.ref_name == 'master'
+        uses: haya14busa/action-bumpr@v1

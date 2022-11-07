@@ -1,0 +1,4 @@
+# https://github.com/github/linguist#using-gitattributes
+
+go.sum linguist-generated
+vendor/* linguist-generated

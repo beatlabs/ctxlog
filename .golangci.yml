@@ -1,0 +1,114 @@
+run:
+  concurrency: 4
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+  skip-dirs:
+    - vendor
+  skip-files:
+
+  modules-download-mode: vendor
+
+  # list of build tags, all linters use it. Default is empty list
+  build-tags:
+    - component
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  format: colored-line-number
+
+  # print lines of code with issue, default is true
+  print-issued-lines: true
+
+  # print linter name in the end of issue text, default is true
+  print-linter-name: true
+
+  uniq-by-line: false
+
+# all available settings of specific linters
+linters-settings:
+  gci:
+    sections:
+      - standard # Captures all standard packages if they do not match another section.
+      - default # Contains all imports that could not be matched to another section type.
+      - prefix(github.com/taxibeat/authentication-service)
+  dupl:
+    threshold: 175
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+  funlen:
+    lines: 80
+    statements: 50
+  gofmt:
+    simplify: true
+  gocyclo:
+    min-complexity: 18
+  unused:
+    check-exported: false
+  unparam:
+    check-exported: false
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+        checks: argument,case,condition,operation,return,assign
+        ignored-numbers: 2
+
+linters:
+  disable-all: true
+  enable:
+    - deadcode
+    - errcheck
+    - dupl
+    - bodyclose
+    - funlen
+    - asciicheck
+    - exportloopref
+    - unparam
+    - unused
+    - unconvert
+    - nolintlint
+    - gofmt
+    - govet
+    - gomnd
+    - gocyclo
+    - nakedret
+    - ineffassign
+    - revive
+    - gosimple
+    - gochecknoinits
+    - rowserrcheck
+    - gocognit
+    - nestif
+    - varcheck
+    - structcheck
+    - gofumpt
+    - gci
+    - misspell
+  fast: false
+
+issues:
+  # Independently from option `exclude` we use default exclude patterns,
+  # it can be disabled by this option. To list all
+  # excluded by default patterns execute `golangci-lint run --help`.
+  # Default value for this option is true.
+  exclude-use-default: false
+
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - bodyclose
+        - funlen
+        - unparam
+        - dupl
+        - govet
+    - path: tests
+      linters:
+        - errcheck
+        - bodyclose
+        - funlen
+        - unparam
