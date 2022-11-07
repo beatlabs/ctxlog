@@ -1,4 +1,4 @@
-# Context Logger
+# Context Logger ![CI](https://github.com/beatlabs/ctxlog/actions/workflows/ci.yml/badge.svg)
 
 `ctxlog` is a library which helps to add a contextual data to your log messages at any time, and have it logged with each message.
 

@@ -25,10 +25,6 @@ jobs:
         if: github.event.action != 'labeled'
         run: make ci-test
 
-      - name: Run component tests
-        if: github.event.action != 'labeled'
-        run: make ci-component-test
-
       - name: Run Bumpr
         # Run this step only if a label is added to the PR (action == labeled) or if the branch is master
         # if a label is added, Bumpr will comment the next version
