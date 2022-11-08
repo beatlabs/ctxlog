@@ -37,6 +37,17 @@ func TestResolvesSameLogger(t *testing.T) {
 		// then
 		assert.Same(t, FromContext(ctx), loggerFromPatron)
 	})
+
+	t.Run("creates a new logger in context without request", func(t *testing.T) {
+		// given
+		ctx := AddLoggerToContext(context.Background())
+
+		// when
+		loggerFromPatron := log.FromContext(ctx)
+
+		// then
+		assert.Same(t, FromContext(ctx), loggerFromPatron)
+	})
 }
 
 func TestCtxLogger(t *testing.T) {
