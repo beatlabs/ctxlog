@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	mocks "github.com/beatlabs/harvester/mocks/patron"
+	mocks "github.com/beatlabs/ctxlog/mocks/patron"
 	"github.com/beatlabs/patron/log"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
