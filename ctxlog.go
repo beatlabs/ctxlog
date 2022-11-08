@@ -35,25 +35,21 @@ type CtxLogger struct {
 	contextData map[string]interface{}
 }
 
+// AddLoggerToContext adds a ctx logger to the given context.
+func AddLoggerToContext(ctx context.Context) context.Context {
+	return log.WithContext(ctx, FromContext(ctx))
+}
+
 // AddLoggerForRequest adds a ctx logger to the context of an HTTP request
 func AddLoggerForRequest(req *http.Request) context.Context {
-	ctx := req.Context()
-	logger := log.FromContext(ctx)
-	if _, ok := logger.(*CtxLogger); ok {
-		return ctx
-	}
+	ctx := AddLoggerToContext(req.Context())
 
-	ctxLogger := &CtxLogger{
-		logger: logger,
-		contextData: map[string]interface{}{
-			RequestID:      getRequestID(req),
-			AmazonTraceID:  req.Header.Get(AmazonTraceHeader),
-			IPForwardedFor: req.Header.Get(ForwardForHeader),
-			UserAgent:      req.Header.Get(UserAgentHeader),
-		},
-	}
-
-	return log.WithContext(ctx, ctxLogger)
+	return log.WithContext(ctx, FromContext(ctx).SubCtx(map[string]interface{}{
+		RequestID:      getRequestID(req),
+		AmazonTraceID:  req.Header.Get(AmazonTraceHeader),
+		IPForwardedFor: req.Header.Get(ForwardForHeader),
+		UserAgent:      req.Header.Get(UserAgentHeader),
+	}))
 }
 
 func getRequestID(req *http.Request) string {
@@ -74,8 +70,10 @@ func FromContext(ctx context.Context) *CtxLogger {
 	}
 
 	ctxLogger := &CtxLogger{
-		logger:      logger,
-		contextData: map[string]interface{}{RequestID: uuid.New().String()},
+		logger: logger,
+		contextData: map[string]interface{}{
+			RequestID: uuid.New().String(),
+		},
 	}
 
 	return ctxLogger
