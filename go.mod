@@ -1,4 +1,4 @@
-module github.com/beatlabs/harvester
+module github.com/beatlabs/ctxlog
 
 go 1.18
 
